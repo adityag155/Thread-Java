@@ -1,20 +1,49 @@
-class MyThread implements Runnable
+class MyThread1 implements Runnable
 {
 Thread t;
-MyThread(String tname)
+Thread obj;
+MyThread1(String tname)
 {
-t=new Thread(this, tname);
+t=new Thread(this,tname);
 t.start();
 }
 
 public void run()
 {
-for(int i=1;i<=4;i++)
+for(int i=1;i<=10;i++)
 {
 System.out.println(t.getName()+":"+i);
 try
 {
 Thread.sleep(1000);
+if(i==5)obj.join();
+}
+catch(InterruptedException ie)
+{}
+}
+}
+}
+
+class MyThread2 implements Runnable
+{
+Thread t;
+Thread obj;
+MyThread2(String tname,Thread obj)
+{
+this.obj=obj;
+t=new Thread(this,tname);
+t.start();
+}
+
+public void run()
+{
+for(int i=11;i<=20;i++)
+{
+System.out.println(t.getName()+":"+i);
+try
+{
+Thread.sleep(1000);
+if(i==15)obj.join();
 }
 catch(InterruptedException ie)
 {}
@@ -26,47 +55,24 @@ class ThreadCode
 {
 public static void main(String args[])
 {
-MyThread m1=new MyThread("One");
-MyThread m2=new MyThread("Two");
-MyThread m3=new MyThread("Three");
 
-System.out.println(m1.t.isAlive());
-System.out.println(m2.t.isAlive());
-System.out.println(m3.t.isAlive());
-try
-{
-m1.t.join();
-m2.t.join();
-m3.t.join();
-}
-catch(InterruptedException ie)
-{}
+MyThread1 m1=new MyThread1("One");
+MyThread2 m2=new MyThread2("Two",m1.t);
 
-
-System.out.println(m1.t.isAlive());
-System.out.println(m2.t.isAlive());
-System.out.println(m3.t.isAlive());
+m1.obj=m2.t;
 }
 }
 
 /*
 O/P:
-true
-true
-true
-Three:1
 One:1
-Two:1
-Three:2
+Two:11
 One:2
-Two:2
-Three:3
+Two:12
 One:3
-Two:3
-Three:4
+Two:13
 One:4
-Two:4
-false
-false
-false
+Two:14
+One:5
+Two:15
 */
