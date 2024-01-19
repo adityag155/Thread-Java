@@ -1,53 +1,17 @@
-class MyThread1 implements Runnable
+class MyThread implements Runnable
 {
 Thread t;
-Thread obj;
-MyThread1(String tname)
+boolean b=true;
+long cnt=0;
+MyThread(int p)
 {
-t=new Thread(this,tname);
+t=new Thread(this);
 t.start();
 }
-
 public void run()
 {
-for(int i=1;i<=10;i++)
-{
-System.out.println(t.getName()+":"+i);
-try
-{
-Thread.sleep(1000);
-if(i==5)obj.join();
-}
-catch(InterruptedException ie)
-{}
-}
-}
-}
-
-class MyThread2 implements Runnable
-{
-Thread t;
-Thread obj;
-MyThread2(String tname,Thread obj)
-{
-this.obj=obj;
-t=new Thread(this,tname);
-t.start();
-}
-
-public void run()
-{
-for(int i=11;i<=20;i++)
-{
-System.out.println(t.getName()+":"+i);
-try
-{
-Thread.sleep(1000);
-if(i==15)obj.join();
-}
-catch(InterruptedException ie)
-{}
-}
+while(b)
+cnt++;
 }
 }
 
@@ -56,23 +20,23 @@ class ThreadCode
 public static void main(String args[])
 {
 
-MyThread1 m1=new MyThread1("One");
-MyThread2 m2=new MyThread2("Two",m1.t);
-
-m1.obj=m2.t;
+MyThread m1=new MyThread(3);
+MyThread m2=new MyThread(8);
+try
+{
+Thread.sleep(1000);
+}
+catch(InterruptedException ie)
+{}
+m1.b=false;
+m2.b=false;
+System.out.println(m1.cnt);
+System.out.println(m2.cnt);
 }
 }
 
 /*
 O/P:
-One:1
-Two:11
-One:2
-Two:12
-One:3
-Two:13
-One:4
-Two:14
-One:5
-Two:15
+142674306
+143171908
 */
