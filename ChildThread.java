@@ -14,7 +14,6 @@ catch(InterruptedException ie)
 }
 }
 }
-
 class ThreadLogic2 implements Runnable
 {
 public void run()
